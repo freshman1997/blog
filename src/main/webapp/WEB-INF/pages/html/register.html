@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>用户注册</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <style>
+      body{
+        background-image: url("/static/image/timg3.jpg");
+        background-size: 100%;
+        background-repeat: no-repeat;
+        align-content: center;
+      }
+      td{
+        height:50px;
+      }
+      .container{
+        box-shadow:gray 0px 0px 10px;
+        margin-top: 100px;
+        width: 40%;
+        color: #ffffff;
+          border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+  <div class="alert alert-success alert-dismissible hide fade in" role="alert" style="width: 500px;text-align: center;margin: 0 auto">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <strong>注册成功！</strong> 将在<span id="control">5</span>秒后跳转到首页.
+  </div>
+
+    <div class="container">
+
+      <form class="form-inline" style="text-align: center;margin: 0 auto" method="post">
+        <table cellspacing="10" cellpadding="20px" align="center">
+          <thead><h2 style="color: whitesmoke">欢迎注册</h2></thead>
+          <tbody>
+          <tr>
+        <div class="form-group">
+            <td><label for="username">用户名</label></td><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><input style="width: 100%" type="text" class="form-control" id="username"
+                       name="username" placeholder="Username"
+                       data-container="body" data-toggle="popover" data-trigger="manual" data-placement="right" data-content="用户名为必需"></td>
+        </div>
+          </tr>
+          <tr>
+        <div class="form-group" >
+          <td ><label for="password">密码</label></td><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td><input style="width: 100%" type="password" class="form-control"
+                     name="password" id="password" placeholder="Password"
+                     data-container="body" data-toggle="popover" data-placement="right" data-trigger="manual" data-content="密码为必需"></td>
+        </div>
+          </tr>
+          <tr>
+        <div class="form-group">
+          <td ><label for="email">电子邮箱</label></td><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+          <td><input style="width: 100%" id="email" type="email" class="form-control"
+                     name="email" placeholder="Email"
+                     data-container="body" data-toggle="popover" data-placement="right" data-trigger="manual" data-content="邮箱为必需，用于找回密码和接收验证码"></td>
+        </div>
+          </tr>
+          <tr>
+            <td><b>性别</b></td>
+            <td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td>
+              <select style="width: 100%" class="form-control" id="gender" name="gender">
+                <option></option>
+                <option>男</option>
+                <option>女</option>
+              </select>
+            </td>
+
+          </tr>
+          <tr>
+            <div class="form-group">
+            <td> <label for="birthday">出生日期</label><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+            <td><input style="width: 100%; color: #000000" id="birthday" type="date" name="birthday" placeholder="生日"></td>
+            </div>
+          </tr>
+          <tr>
+            <div class="form-group">
+              <td><label for="headPhoto">头像图片</label></td><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td><input style="width: 100%" type="file" name="headPhoto" id="headPhoto" accept=".png,.jpg,.jpeg"></td>
+            </div>
+          </tr>
+          <tr>
+            <div class="form-group">
+              <td><button type="button" class="btn btn-primary" onclick="fetchEmailCode()" id="desc-code">获取邮箱验证码</button></td><td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+              <td><input style="width: 100%; color: #000000" maxlength="4" class="form-control" id="code" type="text" name="code" placeholder="验证码"></td>
+            </div>
+          </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><button type="reset" class="btn btn-primary">Reset</button></td>
+              <td colspan="2"> </td>
+              <td style="text-align: right"><button id="submit" type="button" class="btn btn-info">Submit</button></td>
+            </tr>
+          </tfoot>
+        </table>
+      </form>
+    </div>
+  <script src="/static/js/register.js"></script>
+  </body>
+</html>

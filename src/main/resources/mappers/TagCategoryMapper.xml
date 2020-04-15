@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.TagCategoryDao">
+    <resultMap id="BaseResultMap" type="com.yuan.cn.blog.pojo.TagCategory">
+        <id javaType="java.lang.Integer" property="id" column="id"/>
+        <result column="tag_category_name" property="tagCategoryName" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, tag_category_name
+  </sql>
+    <update id="update" parameterType="map">
+        update tag_category set  tag_category_name = #{newValue} where tag_category_name = #{oldValue}
+    </update>
+
+    <select id="findByName" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.TagCategory" parameterType="string">
+        select
+        <include refid="Base_Column_List"/>
+        from tag_category
+        where tag_category_name = #{name,jdbcType=INTEGER}
+    </select>
+    <select id="fetchAll" resultType="com.yuan.cn.blog.pojo.TagCategory" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include>
+        from tag_category limit #{start}, #{end}
+    </select>
+    <select id="detectContainsTagCategoryName" resultType="java.lang.Integer">
+        select  count(1) from tag_category where tag_category_name = #{name}
+    </select>
+    <select id="getTotalNumber" resultType="java.lang.Integer">
+        select count(*) from tag_category
+    </select>
+    <select id="findById" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.TagCategory" parameterType="integer">
+        select <include refid="Base_Column_List"></include>
+        from tag_category where id= #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.yuan.cn.blog.pojo.Love">
+        insert into tag_category(<include refid="Base_Column_List"/>)
+        value (#{id}, #{tagCategoryName})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from tag_category where id = #{id}
+    </delete>
+
+</mapper>

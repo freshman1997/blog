@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.LoveDao">
+    <resultMap id="BaseResultMap" type="com.yuan.cn.blog.pojo.Love">
+        <id javaType="java.lang.Integer" property="id" column="love_id"/>
+        <result column="love_user_id" property="userId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="love_blog_id" property="blogId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        love_id, love_user_id, love_blog_id
+  </sql>
+
+    <select id="findByBlogId" resultMap="BaseResultMap" resultType="list"
+            parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from love
+        where love_blog_id = #{blogId,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByUserId" resultMap="BaseResultMap" resultType="list">
+        select
+        <include refid="Base_Column_List" />
+        from love
+        where love_user_id = #{userId}
+    </select>
+
+    <insert id="insert" parameterType="com.yuan.cn.blog.pojo.Love">
+        insert into love(<include refid="Base_Column_List"/>)
+        value (#{id}, #{userId}, #{blogId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from love where love_id = #{id}
+    </delete>
+
+</mapper>

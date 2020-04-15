@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.TagDao">
+    <resultMap id="BaseResultMap" type="com.yuan.cn.blog.pojo.Tag">
+        <id javaType="java.lang.Integer" jdbcType="INTEGER" property="id" column="tag_id"/>
+        <result column="tag_name" property="name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="tag_category_id" property="tagCategoryId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        tag_id, tag_name, tag_category_id
+  </sql>
+    <update id="update" parameterType="string">
+        update tag set tag_name = #{newValue}, tag_category_id =
+        (select id from tag_category where tag_category_name = #{tagCategoryName}) where tag_name = #{oldValue}
+    </update>
+
+    <select id="findTagByTagCategoryId" resultMap="BaseResultMap" resultType="list" parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from tag
+        where tag_category_id = #{tagCategoryId,jdbcType=INTEGER}
+    </select>
+    <select id="getAllTag" resultType="com.yuan.cn.blog.pojo.Tag" resultMap="BaseResultMap" parameterType="map">
+        select <include refid="Base_Column_List"></include>
+        from tag limit #{start}, #{end}
+    </select>
+    <select id="getTagTotalNumber" resultType="java.lang.Integer">
+        select count(*) from tag
+    </select>
+    <select id="getTagByName" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Tag">
+        select * from tag where tag_name = #{name}
+    </select>
+    <select id="findById" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Tag">
+        select <include refid="Base_Column_List"></include>
+        from tag where tag_id = #{tagId}
+    </select>
+
+    <insert id="insert" parameterType="com.yuan.cn.blog.pojo.Tag">
+        insert into tag(<include refid="Base_Column_List"/>)
+        value (#{id}, #{name}, #{tagCategoryId})
+    </insert>
+
+    <delete id="delete" parameterType="int">
+        delete from tag where tag_id = #{id}
+    </delete>
+
+</mapper>

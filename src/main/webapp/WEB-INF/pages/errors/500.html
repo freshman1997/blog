@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oh, no！系统内部错误了!</title>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script>
+        function back() {
+            window.history.back();
+        }
+        function goBackToHome() {
+            window.location = "/";
+        }
+        
+        function informMe() {
+            $.ajax({
+                type:'post',
+                url:'/positive/inform',
+                success:function () {
+                  // ignore
+                }
+            });
+            window.location = '/';
+        }
+    </script>
+    <style>
+        button{
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div style="height: 60px;width: 100%;background-color: #727c83">
+        <h3 style="text-align: center;line-height: 60px">服务器内部错误啦！无法显示！</h3>
+    </div>
+    <div style="text-align: center; margin-top: 20px">
+        <img src="/static/image/fc7acc977172dd3f6f1ed4ca190e97eb.gif">
+    </div>
+    <div style="width:100%;margin: 50px auto 0 auto;">
+        <div style="margin: 0 auto; width: 50%;text-align: center">
+            <button type="button" onclick="goBackToHome()" style="border:1px;border-radius:4px;padding: 10px; background-color: #0E9A00">返回首页</button>
+
+            <button type="button" onclick="informMe()" style="border:1px;border-radius:4px;padding: 10px; background-color: #0F769F">通知博主并返回首页</button>
+
+            <button type="button" onclick="back()" style="border:1px;border-radius:4px;padding: 10px; background-color: #0F769F">返回上一页</button>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.png"/>
+    <title>404 Not Found</title>
+    <style>
+        div {
+            text-align: center;
+        }
+
+        h1 {
+            font-style: italic;
+        }
+
+        button {
+            padding: 15px;
+            border: 1px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: whitesmoke;
+            font-size: 15px;
+        }
+
+        body {
+            color: whitesmoke;
+        }
+    </style>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function goBackToHome() {
+            window.location = '/';
+        }
+    </script>
+</head>
+<body>
+<div style="position: absolute; top: 30%; left: 25%; width: 50%">
+    <div>
+        <h1><span>404</span> <span style="margin-left: 40px">Not Found</span></h1>
+        <h2>您要找的文章不存在...</h2>
+    </div>
+    <div style="width: 36%;margin: 30px auto">
+        <button style="float: left; background-color: #0E9A00" onclick="goBackToHome()">返回首页</button>
+        <button style="float: right;background-color: #0F769F" onclick="goBack()">返回上一页</button>
+    </div>
+</div>
+<img style="width: 100%; height: 50%" src="/static/image/mp56082109_1453474473746_3.gif">
+</body>
+</html>

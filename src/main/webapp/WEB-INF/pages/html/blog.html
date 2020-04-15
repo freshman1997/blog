@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.png" />
+    <title th:text="${blog.title}"></title>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/highlight/highlight.pack.js"></script>
+    <script src="/static/js/highlight/highlightjs-line-numbers.min.js"></script>
+    <script src="/static/js/rgbaster.js"></script>
+    <script src="/static/js/home.js"></script>
+    <script src="/static/js/blog.js"></script>
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/about.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/blog.css">
+    <link href="/static/css/highlight/styles/darcula.css" rel="stylesheet">
+</head>
+<body>
+<div class="container" style="width: 100%; margin-top: 20px">
+
+    <div style="height: 20px"></div>
+
+    <div class="head" id="head">
+        <div style="width: 50%; margin: 135px 50px 50px 50px">
+            <!--            脚本编程 网站预缓存工具，整体加速网站性能-->
+            <span th:text="${blog.category}"></span>
+            <div id="hr" style="height: 1px; width: 60px;background-color: whitesmoke;margin-bottom: 20px"></div>
+            <h2 th:text="${blog.title}"></h2>
+        </div>
+        <div style="width: 50%;">
+            <img id="head-photo" class="head-photo" th:src="${picUrl}"/>
+        </div>
+
+    </div>
+
+    <!--博客正文内容以及文章目录-->
+    <div style="display: flex; justify-content:flex-start;width: 90%;margin: 0 auto;">
+        <div class="blog-detail" style="width: 100%; margin: 20px auto 0 auto" id="blog-content">
+            <div style="text-align: right;width: 90%;margin: 20px auto 0 auto;color: gray">
+                <span class="glyphicon glyphicon-user"></span>
+                <span th:utext="${info}"> &nbsp;&nbsp;会飞的羊 · 2月8日 · 2020年 &nbsp;</span>
+                <span class="glyphicon glyphicon-tags"> </span>
+                <span th:text="'&nbsp;' + ${tag} + '&nbsp;'"> </span>
+                <span class="glyphicon glyphicon-book"></span>
+                <span th:text="${readNumber} == null? '&nbsp;0次已读' : ${readNumber} + '&nbsp;次已读'"> &nbsp;2000次已读 </span>
+            </div>
+
+            <div class="over"></div><!--背景层-->
+            <!--博客正文内容-->
+            <div th:utext="${blog.content}" class="blog-content amplifyImg">
+            </div>
+            <div id="blog-bottom" style="float: right;margin-top: 30px;margin-right: 30px; margin-bottom: 30px">
+                <span class="glyphicon glyphicon-thumbs-up" style="font-size: 15px"></span>
+                <span id="love" th:text="${hasLovedThisBlog}? '已点赞' : '点赞文章'"></span><span id="love-number"
+                                                                                           th:text="'(' + ${blog.love} + ')'"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--评论部分-->
+<div style="display: flex; justify-content:flex-start;width: 88%;margin: 0 auto;">
+    <div style="width: 100%" id="comment-pane">
+        <div class="comment">
+            <span>&nbsp;</span>
+            <div style="width: 90%;margin: 0 auto 0 auto;clear: both">
+                <div id="blog-tag" style="margin: 50px auto 0 auto;">
+                    <span class="glyphicon glyphicon-comment"></span>
+                    <span id="comment-number"
+                          th:text="${commentNumber} == null? '0条回应' : ${commentNumber}  + '条回应'"></span>
+                    <div style="width: 50px;height: 2px;background-color: #0F769F;margin-top: 20px"></div>
+                </div>
+
+                <div class="form-group" id="reply-pane">
+                        <textarea style="margin-top: 30px;height: 150px;margin-bottom: 10px"
+                                  class="form-control comment-content"
+                                  placeholder="欢迎来到Jack Yuan的博客，记得留下足迹哦！"></textarea>
+                    <button type="button" class="btn btn-success" onclick="addComment(0, this)"
+                            style="float: right"><span class="glyphicon glyphicon-send"
+                                                       style="margin-right: 5px"></span>提交评论
+                    </button>
+                </div>
+
+                <div style="height: 60px"></div>
+                <div class="comment-content" th:if="${#lists.size(commentList) eq 0}"></div>
+
+                <div class="comment-content" th:each="comment : ${commentList} ">
+                    <div class="each-reply-content">
+                        <span class="comment-id" style="display: none" th:text="${comment.id}"></span>
+                        <img th:src="${comment.userHeadPhotoUrl}"
+                             style="width: 60px;height: 60px;border-radius: 8px;box-shadow:gray 0 0 8px;">
+                        <div style="width: 100%;margin-left: 20px;">
+                                <span th:text="${comment.username}" class="user-name"
+                                      style="color: #0F769F;font-weight: bold">会游泳的羊</span>
+                            <div style="display: flex;justify-content: flex-start">
+                                <div style="width: 80px;background-color: #0F769F;height: 2px;"></div>
+                                <div style="width: 100%;background-color: grey;height: 1px;"></div>
+                                <span class="glyphicon glyphicon-edit reply" title="评论他"></span>
+                            </div>
+                            <!--评论-->
+                            <span th:text="${comment.commentContent}" style="margin-bottom: 10px">博客写的真好，很有帮助哦博客写的真好，很有帮助哦</span>
+                        </div>
+                    </div>
+                    <div th:each="comment1 : ${commentReplyList} ">
+                        <div th:if="${comment.id} == ${comment1.replyId}">
+                            <div th:each="comment2 : ${commentReplyList}">
+                                <div class="each-reply" th:if="${comment2.replyId} == ${comment1.id}">
+                                    <span class="comment-id" style="display: none" th:text="${comment2.id}"></span>
+                                    <img th:src="${comment2.userHeadPhotoUrl}"
+                                         style="width: 60px;height: 60px;border-radius: 8px;box-shadow:gray 0 0 8px;">
+                                    <div style="width: 100%;margin-left: 20px;">
+                                    <span th:text="${comment2.username}" class="user-name"
+                                          style="color: #0F769F;font-weight: bold">会游泳的羊</span>
+                                        <div style="display: flex;justify-content: flex-start">
+                                            <div style="width: 80px;background-color: #0F769F;height: 2px;"></div>
+                                            <div style="width: 84.5%;background-color: grey;height: 1px;"></div>
+                                            <span class="glyphicon glyphicon-edit reply" title="评论他"></span>
+                                        </div>
+                                        <!--评论-->
+                                        <span th:utext="'@' + ${comment2.replyUsername}+ ' ' + ${comment2.commentContent}"
+                                              style="margin-bottom: 10px">@会游泳的羊 博客写的真好，很有帮助哦博客写的真好，很有帮助哦</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="each-reply">
+                                <span class="comment-id" style="display: none" th:text="${comment1.id}"></span>
+                                <img th:src="${comment1.userHeadPhotoUrl}"
+                                     style="width: 60px;height: 60px;border-radius: 8px;box-shadow:gray 0 0 8px;">
+                                <div style="width: 100%;margin-left: 20px;">
+                                    <span th:text="${comment1.username}" class="user-name"
+                                          style="color: #0F769F;font-weight: bold">会游泳的羊</span>
+                                    <div style="display: flex;justify-content: flex-start">
+                                        <div style="width: 80px;background-color: #0F769F;height: 2px;"></div>
+                                        <div style="width: 84.5%;background-color: grey;height: 1px;"></div>
+                                        <span class="glyphicon glyphicon-edit reply" title="评论他"></span>
+                                    </div>
+                                    <!--评论-->
+                                    <span th:utext="'@' + ${comment1.replyUsername}+ ' ' + ${comment1.commentContent}"
+                                          style="margin-bottom: 10px">@会游泳的羊 博客写的真好，很有帮助哦博客写的真好，很有帮助哦</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="height: 30px;margin-bottom: 0"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="msg" class="alert alert-success alert-dismissible" role="alert" style="display:none; visibility:hidden;position: fixed; bottom: 20px; right: 10px">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" style="margin-top: 5px"><span aria-hidden="true">&times;</span></button>
+    <strong>恭喜，</strong> 评论成功！
+</div>
+</div>
+
+<div style="text-align: center; margin-top: 50px">
+    <span>Copyright © 2020-至今 Jack Yuan博客 保留所有权利</span>
+</div>
+
+<script>
+    console.log('hey，牛人你好，小破站祝你趴网站愉快哦！');
+    var img = document.getElementById('head-photo');
+    var hr = document.getElementById('hr');
+    var image = new Image();
+    image.src = img.src;
+    var box = document.getElementById('head');
+    RGBaster.colors(img, {
+        // return up to 30 top colors from the palette  从调色板返回最多30个顶级颜色
+        paletteSize: 30,
+        // don't count white
+        //排除 白色
+        exclude: ['rgb(255,255,255)'],
+        // do something when done
+        //获取成功之后
+        success: function (payload) {
+            box.style.background = payload.dominant;
+            //box.style.backgroundImage = img;
+            var str = payload.dominant.substr(4).substr(0, payload.dominant.substr(4).length - 1);
+            var strs = str.split(',');
+            if (parseInt(strs[0]) < 180 && parseInt(strs[1]) < 180 && parseInt(strs[2]) < 180) {
+                box.style.color = 'white';
+                hr.style.backgroundColor = 'white';
+            } else {
+                box.style.color = 'black';
+                hr.style.backgroundColor = 'black';
+            }
+            // console.log('Dominant color:', strs);
+            // console.log('Secondary color:', payload.secondary);
+            //console.log('Palette:', payload.palette);
+        }
+    });
+    var commentUsername = null;
+    var commentId = null;
+    var replySelector = null;
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('#blog-bottom').click(function () {
+            var url = window.location.href;
+            var bm = url.substr(url.lastIndexOf('/') + 1);
+
+            $.ajax({
+                type: 'post',
+                url: '/blog/love?bm=' + bm,
+                success: function (ret) {
+                    if (ret.status === 0) {
+                        console.log('love successfully');
+                        var loveNumber = $('#love-number');
+                        $('#love').text('已点赞');
+                        var number = loveNumber.text();
+                        number = number.substr(number.indexOf('(') + 1, number.lastIndexOf(')') - 1);
+                        console.log(number);
+                        number = parseInt(number) + 1;
+                        loveNumber.text('(' + number + ')');
+                    } else {
+                        alert('点赞失败： nested exception is ' + ret.message);
+                    }
+                }
+            });
+        });
+    });
+
+    function addComment(type, context) {
+        var commentContent = $(context).siblings('textarea').val();
+        if (type === 1) {
+            commentContent = $(context).parent().siblings('textarea').val();
+        }
+
+        if (commentContent === '') {
+            alert('内容为空，不能评论！');
+            return;
+        }
+        if (commentContent.length < 2) {
+            alert('评论内容少于两个字，评论失败！');
+            return;
+        }
+        var url = window.location.href;
+        var bm = url.substr(url.lastIndexOf('/') + 1);
+        var uri = '/blog/comment';
+        if (type === 0) { // 直接评论，不是回复
+            uri += '?c=' + commentContent + '&bm=' + bm;
+            $(context).siblings('textarea').val('');
+        } else {
+            uri += '?c=' + commentContent + '&bm=' + bm + '&run=' + commentUsername + '&id=' + commentId;
+            $(context).parent().siblings('textarea').val('');
+        }
+
+        // todo 上传评论内容
+        $.ajax({
+            type: 'post',
+            url: uri,
+            success: function (ret) {
+                if (ret.status === 0) {
+                    console.log('successfully');
+                    if (type === 0) {
+
+                        var innerHtml1 = '<div class="comment-content">\n' +
+                            '                        <div class="each-reply-content">\n' +
+                            '                            <span class="comment-id" style="display: none">'+ret.data.id+'</span><img src="' + ret.data.userHeadPhotoUrl + '"' +
+                            '                                 style="width: 60px;height: 60px;border-radius: 8px;box-shadow:gray 0 0 8px;">\n' +
+                            '                            <div style="width: 100%;margin-left: 20px;">\n' +
+                            '                                <span class="user-name"\n' +
+                            '                                      style="color: #0F769F;font-weight: bold">' + ret.data.username + '</span>\n' +
+                            '                                <div style="display: flex;justify-content: flex-start">\n' +
+                            '                                    <div style="width: 80px;background-color: #0F769F;height: 2px;"></div>\n' +
+                            '                                    <div style="width: 100%;background-color: grey;height: 1px;"></div>\n' +
+                            '                                    <span class="glyphicon glyphicon-edit reply" title="评论他"></span>\n' +
+                            '                                </div>\n' +
+                            '                                <!--评论-->\n' +
+                            '                                <span style="margin-bottom: 10px">' + ret.data.commentContent + '</span>\n' +
+                            '                            </div>\n' +
+                            '                        </div>\n' +
+                            '                    </div>';
+                        var comments = $('.comment-content');
+                        $(comments[comments.length - 1]).append(innerHtml1);
+                    } else {
+                        var innerHtml2 = '                          <div class="each-reply">\n' +
+                            '                                <span class="comment-id" style="display: none">'+ret.data.id+'</span><img class="im" src="' + ret.data.userHeadPhotoUrl + '" \n' +
+                            '                                     style="width: 60px;height: 60px;border-radius: 8px;box-shadow:gray 0 0 8px;">\n' +
+                            '                                <div style="width: 100%;margin-left: 20px;">\n' +
+                            '                                    <span style="color: #0F769F;font-weight: bold"  class="user-name">' + ret.data.username + '</span>\n' +
+                            '                                    <div style="display: flex;justify-content: flex-start">\n' +
+                            '                                        <div style="width: 80px;background-color: #0F769F;height: 2px;"></div>\n' +
+                            '                                        <div style="width: 84.5%;background-color: grey;height: 1px;"></div>\n' +
+                            '                                        <span class="glyphicon glyphicon-edit reply" title="评论他"></span>\n' +
+                            '                                    </div>\n' +
+                            '                                    <!--评论-->\n' +
+                            '                                    <span style="margin-bottom: 10px">@' + ret.data.replyUsername + ' ' + ret.data.commentContent + '</span>\n' +
+                            '                                </div>\n' +
+                            '                            </div>';
+                        replySelector.append(innerHtml2);
+
+                    }
+                    var msg = $("#msg");
+                    msg.css({'display':'block', 'visibility':'visible'});
+                    setTimeout(function () {
+                        msg.css({'display':'none', 'visibility':'hidden'});
+                    }, 3000);
+                    var cnumber = $('#comment-number');
+                    var text = cnumber.text();
+                    text = text.substr(0, text.indexOf('条'));
+                    var addOne = parseInt(text) + 1;
+                    cnumber.text(addOne + "条回应");
+
+                    $('.reply').on('click', replyAction);
+                    $('#pane').remove();
+                    $('#reply-pane').attr('style', 'display:block;visibility:visible');
+                    replier = null;
+                } else
+                    alert('评论失败：' + ret.message);
+            }
+        });
+    }
+
+    var replier = null;
+    $('.reply').on('click', replyAction);
+
+    function replyAction() {
+        var html = '<div class="form-group"  id="pane">\n' +
+            '                            <textarea id="comment-typing" style="width:100%;margin-top: 30px;height: 150px;margin-bottom: 10px"\n' +
+            '                                  class="form-control" placeholder="欢迎来到Jack Yuan的博客，记得留下足迹哦！"></textarea>\n' +
+            '                            <div style="float: right">\n' +
+            '                                <span class="glyphicon glyphicon-ban-circle cancel-reply" style="margin-right: 5px;color: #0F769F;"></span><span class="cancel-reply" style="color: #0F769F;cursor:pointer;">取消回复</span>\n' +
+            '                                <button type="button" class="btn btn-success" onclick="addComment(1, this)"><span class="glyphicon glyphicon-send" style="margin-right: 5px"></span>提交评论</button>\n' +
+            '                            </div>\n' +
+            '                        </div>';
+        $('#reply-pane').attr('style', 'display:none;visibility:hidden');
+
+        commentUsername = $(this).parent('div').siblings('.user-name').text();
+        commentId = $(this).parent().parent().siblings('.comment-id').text();
+        replySelector = $(this).parent().parent().parent().parent();
+        if (replier != null) {
+            $(this).parent('div').parent('div').parent('div').after($('#pane'));
+            replier = $(this);
+
+            if ($(this).parent('div').parent('div').parent('div').hasClass('each-reply')) {
+                $('#pane').addClass('each-reply-margin-width');
+            } else {
+                $('#pane').removeClass('each-reply-margin-width');
+            }
+            return;
+        }
+
+        $(this).parent('div').parent('div').parent('div').after(html);
+        replier = $(this);
+
+        if ($(this).parent('div').parent('div').parent('div').hasClass('each-reply')) {
+            $('#pane').addClass('each-reply-margin-width');
+        } else {
+            $('#pane').removeClass('each-reply-margin-width');
+        }
+
+        $('.cancel-reply').on('click', function () {
+            $('#pane').remove();
+            $('#reply-pane').attr('style', 'display:block;visibility:visible');
+            replier = null;
+        });
+    }
+
+    $('#comment-typing').on('mousedown', function () {
+        $('#blog-tag div').css('width', '20px');
+        console.log("Hello")
+    }).on('mouseout', function () {
+        $('#blog-tag div').css('width', '50px');
+    });
+</script>
+<script>
+    $(document).ready(function () {
+
+        $('code').addClass('monokai-sublime');
+        var imgsObj = $('.amplifyImg img');//需要放大的图像
+        if (imgsObj) {
+            $.each(imgsObj, function () {
+                $(this).click(function () {
+                    var currImg = $(this);
+                    coverLayer(1);
+                    var tempContainer = $('<div class=tempContainer></div>');//图片容器
+                    with (tempContainer) {//width方法等同于$(this)
+                        appendTo("body");
+                        var windowWidth = $(window).width();
+                        var windowHeight = $(window).height();
+                        //获取图片原始宽度、高度
+                        var orignImg = new Image();
+                        orignImg.src = currImg.attr("src");
+                        var currImgWidth = orignImg.width;
+                        var currImgHeight = orignImg.height;
+                        if (currImgWidth < windowWidth) {//为了让图片不失真，当图片宽度较小的时候，保留原图
+                            if (currImgHeight < windowHeight) {
+                                var topHeight = (windowHeight - currImgHeight) / 2;
+                                if (topHeight > 35) {/*此处为了使图片高度上居中显示在整个手机屏幕中：因为在android,ios的微信中会有一个title导航，35为title导航的高度*/
+                                    topHeight = topHeight - 35;
+                                    css('top', topHeight);
+                                } else {
+                                    css('top', 0);
+                                }
+                                html('<img border=0 src=' + currImg.attr('src') + '>');
+                            } else {
+                                css('top', 0);
+                                html('<img border=0 src=' + currImg.attr('src') + ' height=' + windowHeight + '>');
+                            }
+                        } else {
+                            var currImgChangeHeight = (currImgHeight * windowWidth) / currImgWidth;
+                            if (currImgChangeHeight < windowHeight) {
+                                var topHeight = (windowHeight - currImgChangeHeight) / 2;
+                                if (topHeight > 35) {
+                                    topHeight = topHeight - 35;
+                                    css('top', topHeight);
+                                } else {
+                                    css('top', 0);
+                                }
+                                html('<img border=0 src=' + currImg.attr('src') + ' width=' + windowWidth + ';>');
+                            } else {
+                                css('top', 0);
+                                html('<img border=0 src=' + currImg.attr('src') + ' width=' + windowWidth + '; height=' + windowHeight + '>');
+                            }
+                        }
+                    }
+                    tempContainer.click(function () {
+                        $(this).remove();
+                        coverLayer(0);
+                    });
+                });
+            });
+        } else {
+            return false;
+        }
+
+        //使用禁用蒙层效果
+        function coverLayer(tag) {
+            with ($('.over')) {
+                if (tag == 1) {
+                    css('height', $(document).height());
+                    css('display', 'block');
+                    css('opacity', 1);
+                    css("background-color", "#FFFFFF");
+                    css("background-color", "rgba(0,0,0,0.3)");  //蒙层透明度
+                } else {
+                    css('display', 'none');
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

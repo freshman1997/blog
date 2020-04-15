@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>博客管理</title>
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.png"/>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/page/jquery.pagination.js"></script>
+    <script src="/static/js/common.js"></script>
+    <style>
+        .parent {
+            width: 90%;
+            margin: 20px auto 0 auto;
+            border-radius: 15px;
+            box-shadow: gray 0 0 15px;
+            padding: 15px;
+            height: 725px;
+        }
+
+        .left li {
+            padding: 0;
+        }
+
+        .user {
+            display: inline-block;
+            text-align: center;
+            line-height: 98px;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+
+        .dropdown li {
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .dropdown li span:hover {
+            color: #0F769F;
+        }
+
+        .ui-pagination-container a {
+            padding: 8px 12px;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" style="width: 100%">
+    <div class="parent">
+        <!--左侧-->
+        <div class="col-lg-12">
+            <div class="col-lg-12" style="border-radius: 4px;box-shadow: gray 0 0 4px;">
+                <span style="display: inline-block;line-height: 98px;font-family: Consolas;font-size: 30px">欢迎来到Jack Yuan的博客管理页面</span>
+                <div style="float: right;" id="user-options">
+                    <div class="dropdown" style="display: flex;justify-content: flex-start;">
+                        <span class="glyphicon glyphicon-user user" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false"></span>
+                        <span class="user" data-toggle="dropdown" aria-haspopup="true"
+                              aria-expanded="false" th:text="'欢迎您,'+${username}"></span>
+                        <span class="user" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img width="20px" height="20px" class="img-circle" alt="头像"
+                                 src="/usr/head-photo">
+                         </span>
+                        <ul class="dropdown-menu" style="margin-top: -30px;" aria-labelledby="dLabel">
+                            <li>
+                                <span><a href="javascript:;" onclick="logout()">退出</a></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--上侧和右侧-->
+        <div class="col-lg-12" style="height: 600px;display: flex; justify-content: flex-start;margin-top: 10px">
+
+            <div style=" width:20%;height: 580px; border-radius: 4px; padding:4px;box-shadow: gray 0 0 4px;">
+                <!-- 侧边栏标签页 -->
+                <ul class="nav nav-pills nav-stacked left" style="padding: 0">
+                    <!-- 侧边栏选项 -->
+                    <li role="presentation" class="active">
+                        <!-- 选项控制data-target对应的显隐 -->
+                        <a href="#" data-toggle="collapse" data-target="#user-list">用户管理 <span class="caret"></span></a>
+                        <!-- 隐藏的详细菜单 -->
+                        <ul id="user-list" class="collapse">
+                            <li>
+                                <a href="javascript:;" onclick="allUser()">所有用户</a>
+                            </li>
+                            <li>
+                                <a href="#">正常用户</a>
+                            </li>
+                            <li>
+                                <a href="#">禁用用户</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" data-toggle="collapse" data-target="#blog-list">博客管理<span class="caret"></span>
+                            <ul id="blog-list" class="collapse">
+                                <li>
+                                    <a href="#all-blog" onclick="allBlog()">所有博客</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" data-toggle="collapse" data-target="#blog-category">博客分类管理<span
+                                class="caret"></span>
+                            <ul id="blog-category" class="collapse">
+                                <li>
+                                    <a href="javascript:" onclick="allBlogCategory()">所有分类</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#" data-toggle="collapse" data-target="#tag">标签管理<span class="caret"></span>
+                            <ul id="tag" class="collapse">
+                                <li>
+                                    <a href="#all-blog" onclick="allTag()">所有标签</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#" data-toggle="collapse" data-target="#tagCategory">标签分类管理<span class="caret"></span>
+                            <ul id="tagCategory" class="collapse">
+                                <li>
+                                    <a href="#" onclick="allTagCategory()">所有标签分类</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#" data-toggle="collapse" data-target="#comment">评论管理<span class="caret"></span>
+                            <ul id="comment" class="collapse">
+                                <li>
+                                    <a href="#" onclick="allComment()">所有评论</a>
+                                </li>
+                            </ul>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div style="width: 2%"></div>
+            <div id="pane" style="width:78%;height: 580px;border-radius: 4px; padding: 15px; box-shadow: gray 0 0 4px;">
+                <h1 style="text-align: center;line-height: 570px">Welcome!</h1>
+            </div>
+        </div>
+    </div>
+
+    <!--标签提示-->
+    <div id="add-tag" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="tag-title">新增标签</h4>
+                </div>
+                <div class="modal-body" id="tag-message-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="tag-name">标签名称：
+                                <input type="text" id="tag-name" class="form-control" placeholder="输入标签的名称">
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="tag-category">标签类型：
+                                <select id="tag-category" class="form-control">
+                                </select>
+                            </label>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-tag">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--分类提示-->
+    <div id="addCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增分类</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="tag-name">分类名称：
+                                <input type="text" id="category-name" class="form-control" placeholder="输入分类的名称">
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-category">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--添加标签分类-->
+    <div id="addTagCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="tag-category-title">新增标签分类</h4>
+                </div>
+                <div class="modal-body" id="tag-category-modal-body">
+
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="tag-name">标签分类名称：
+                                <input type="text" id="tag-category-name" class="form-control" placeholder="输入分类的名称">
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="save-tag-category">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--用户删除提示-->
+    <div id="deleteUser" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height: 150px">
+                <div style="height:20px;vertical-align: middle; margin-right: 10px;margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div style="margin-top: 10px">
+                    <span style="margin-left: 20px">确定删除此用户？</span><br>
+                    <span style="margin-left: 20px">删除之后会丢失一个用户的！！！</span>
+                </div>
+                <div style="position: fixed; right: 10px; bottom: 10px">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="取消">
+                    <button id="sureDeleteUser" style="margin-left:20px" type="button" class="btn btn-danger">确定删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--博客删除提示-->
+    <div id="deleteBlog" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height: 150px">
+                <div style="height:20px;vertical-align: middle; margin-right: 10px;margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div style="margin-top: 10px">
+                    <span style="margin-left: 20px">确定删除此博客？</span><br>
+                    <span style="margin-left: 20px">删除之后会让体验变差的！！！</span>
+                </div>
+                <div style="position: fixed; right: 10px; bottom: 10px">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="取消">
+                    <button id="sureDeleteBlog" style="margin-left:20px" type="button" class="btn btn-danger">确定删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--博客分类删除提示-->
+    <div id="deleteBlogCategory" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height: 150px">
+                <div style="height:20px;vertical-align: middle; margin-right: 10px;margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div id="category-message-content" style="margin-top: 10px">
+                    <span style="margin-left: 20px">确定删除此分类？</span><br>
+                </div>
+                <div style="position: fixed; right: 10px; bottom: 10px">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="取消">
+                    <button id="sureDeleteBlogCategory" style="margin-left:20px" type="button" class="btn btn-danger">确定删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteComment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content" style="height: 150px">
+                <div style="height:20px;vertical-align: middle; margin-right: 10px;margin-top: 10px">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                </div>
+                <div style="margin-top: 10px">
+                    <span style="margin-left: 20px">确定删除此评论？</span><br>
+                </div>
+                <div style="position: fixed; right: 10px; bottom: 10px">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" value="取消">
+                    <button id="sureDeleteComment" style="margin-left:20px" type="button" class="btn btn-danger">确定删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/admin/admin-pane.js"></script>
+</body>
+</html>

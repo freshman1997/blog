@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="/static/image/favicon.png"/>
+    <title>搜索博客</title>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link href="/static/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/details-snapshot.css">
+    <link rel="stylesheet" href="/static/css/home.css">
+    <link rel="stylesheet" href="/static/css/search-loading.css">
+</head>
+
+<body>
+<div class="container" style="margin-top: 20px;margin-bottom: 20px">
+    <div class="navigation">
+        <div class="col-lg-12" style="padding: 0">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search for...">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="search-action"><span
+                            class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div>
+
+    <div style="height: 20px"></div>
+    <div id="preset" th:if="${#lists.size(details) == 0}" style="text-align:center;margin: 100px auto 0 auto;">
+        <span>没有相关的结果</span>
+    </div>
+    <div class="parent">
+        <div th:each="detail : ${details}">
+            <div class="row">
+                <!--文章缩略-->
+                <div class="item" th:each="d : ${detail}">
+                    <a href="#" th:href="'/blog/article/' + ${d.mask}">
+                        <img class="inner" th:src="${d.picUrl}" th:alt="${d.title}"/>
+                    </a>
+                    <div style="justify-content: space-between">
+                        <span th:text="${#dates.format(d.createTime, 'MM月dd号 · yyyy年')}">8月23号 · 2019</span>
+                        <h4><a class="b-title" th:href="'/blog/article/' + ${d.mask}" th:alt="${d.title}"
+                               th:title="${d.title}" th:text="${d.title}">Nginx 配置详解</a></h4>
+                        <div style="display:inline-block;margin-bottom: 5px" th:each="tag : ${d.tags}">
+                            <span class="label label-success" th:text="${tag}">nginx</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="width: 45px"></div>
+            </div>
+            <div style="height: 20px"></div>
+
+        </div>
+    </div>
+    <div class="loading">
+        <span></span>
+    </div>
+    <div id="no-data" style="text-align:center;margin: 100px auto 0 auto; display: none; visibility: hidden">
+        <span>没有相关的结果</span>
+    </div>
+    <div style="text-align: center;vertical-align:middle;margin: 30px auto 0 auto">
+        <span>Copyright © 2020-至今 Jack Yuan博客 保留所有权利.</span>
+    </div>
+</div>
+
+<script src="/static/js/home.js"></script>
+<script src="/static/js/search.js"></script>
+<script src="/static/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.BlogDao">
+    <resultMap id="BaseResultMap" type="com.yuan.cn.blog.pojo.Blog">
+        <id javaType="java.lang.Integer" property="id" column="blog_id" jdbcType="INTEGER"/>
+        <result column="blog_love_number" property="love" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="blog_mark" property="mark" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="blog_title" property="title" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="blog_table_of_content" property="table" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="blog_content" property="content" jdbcType="VARCHAR" javaType="java.lang.String"/>
+        <result column="blog_create_time" property="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date"/>
+        <result column="blog_user_id" property="userId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="blog_category_id" property="categoryId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    blog_id, blog_love_number, blog_mark, blog_title, blog_table_of_content,
+    blog_content, blog_create_time, blog_user_id, blog_category_id
+  </sql>
+    <insert id="setBlogPicture" parameterType="map">
+        insert into blog_picture(blog_id, blog_picture_mask) values(#{bid}, #{picUrl})
+    </insert>
+    <update id="updateBlogLoved">
+        update blog set blog_love_number = blog_love_number + 1 where blog_id = #{blogId}
+    </update>
+    <select id="findBlogByMark" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Blog"
+            parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from blog
+        where blog_mark = #{mark,jdbcType=VARCHAR}
+    </select>
+
+    <select id="findBlogById" parameterType="int" resultType="com.yuan.cn.blog.pojo.Blog">
+        select
+        <include refid="Base_Column_List" />
+        from blog
+        where blog_id = #{blogId}
+    </select>
+
+    <select id="findBlogByTitleUsingLike" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Blog"
+            parameterType="java.lang.String">
+        select
+        blog_id, blog_title, blog_mark, blog_create_time, blog_category_id
+        from blog
+        where blog_title like concat('%', #{title,jdbcType=VARCHAR}, '%')
+    </select>
+
+    <select id="countBlogNumber" resultType="int">
+        select count(*) from blog
+    </select>
+
+    <delete id="deleteBlog" parameterType="java.lang.Integer">
+    delete from blog
+    where blog_id = #{blogId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteTagBlogMapAndLoveItem">
+        delete from tag_blog_map, love where blog_id = #{blogId}
+    </delete>
+
+    <insert id="insertBlog" parameterType="com.yuan.cn.blog.pojo.Blog">
+        insert into blog(blog_id, blog_mark, blog_title, blog_table_of_content, blog_content, blog_create_time, blog_user_id, blog_category_id)
+        values (
+        #{id},
+        #{mark},
+        #{title},
+        #{table},
+        #{content},
+        #{createTime},
+        #{userId},
+        #{categoryId}
+        )
+    </insert>
+    <insert id="addTags" parameterType="map">
+        insert into tags_blogs_map(blog_id, tag_id) values
+            <foreach item="item" open="" close="" separator="," collection="tagIds" index="">
+                (#{blogId}, #{item})
+            </foreach>
+    </insert>
+
+    <select id="fetchAllBlog" resultMap="BaseResultMap" resultType="list">
+        select
+        <include refid="Base_Column_List"/>
+        from blog limit #{s}, #{e}
+    </select>
+
+    <select id="getTheMostLove4" resultMap="BaseResultMap" resultType="list">
+        select blog_id, blog_title, blog_mark, blog_content, blog_create_time, blog_category_id
+        from blog order by blog_love_number desc limit 4
+    </select>
+
+    <select id="getTheMostLove40" resultMap="BaseResultMap" resultType="list">
+        select blog_id, blog_title, blog_mark, blog_create_time, blog_category_id
+        from blog order by blog_love_number desc limit 4, 44
+    </select>
+    <select id="countUserBlog" resultType="java.lang.Integer" parameterType="int">
+        select count(*) from blog where blog_user_id = #{userId}
+    </select>
+    <select id="hasTheSameTitleMarker" resultType="java.lang.Integer">
+        select count(1) from blog where blog_mark = #{marker}
+    </select>
+    <select id="getBlogPicture" resultType="java.lang.String">
+        select blog_picture_mask from blog_picture where blog_id = #{blogId}
+    </select>
+    <select id="fullSnapshot" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Blog">
+        select blog_id, blog_title, blog_mark, blog_content, blog_create_time from blog where blog_category_id = #{categoryId}
+    </select>
+    <select id="fetchBlogTagsByTagId" resultType="java.lang.Integer" parameterType="int">
+        select tag_id from tags_blogs_map where blog_id = #{blogId}
+    </select>
+
+
+</mapper>

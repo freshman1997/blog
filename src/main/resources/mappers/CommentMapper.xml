@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.CommentDao">
+    <resultMap id="BaseResultMap" type="com.yuan.cn.blog.pojo.Comment">
+        <id javaType="java.lang.Integer" property="id" column="comments_id"/>
+        <result column="comments_user_id" property="userId" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result column="comments_blog_id" property="blogId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="comments_reply_id" property="replyId" jdbcType="INTEGER" javaType="java.lang.Integer"/>
+        <result column="comments_content" property="content" javaType="java.lang.String" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        comments_id, comments_user_id, comments_blog_id, comments_reply_id, comments_content
+  </sql>
+
+    <select id="fetchAllComment" resultMap="BaseResultMap" resultType="list" parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from comments limit #{start}, #{end}
+    </select>
+
+    <select id="fetchCommentByBlogId" resultMap="BaseResultMap" resultType="list" parameterType="int">
+        select
+        <include refid="Base_Column_List"/>
+        from comments
+        where comments_blog_id = #{blogId,jdbcType=INTEGER} order by comments_id asc
+    </select>
+    <select id="totalCommentNumber" resultType="java.lang.Integer">
+        select count(*) from comments
+    </select>
+    <select id="getCommentReplyList" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Comment">
+        select * from comments where comments_reply_id = #{commentId}
+    </select>
+    <select id="fetchById" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Comment">
+        select * from comments where comments_id = #{commentId}
+    </select>
+    <select id="fetchLastOne" resultMap="BaseResultMap" resultType="com.yuan.cn.blog.pojo.Comment">
+        select * from comments where comments_id = (select last_insert_id())
+    </select>
+
+    <insert id="addComment" parameterType="map">
+        insert into comments(comments_user_id, comments_blog_id, comments_content)
+        value (#{userId}, #{blogId}, #{content})
+    </insert>
+
+    <insert id="addReplyComment" parameterType="map">
+        insert into comments(comments_user_id, comments_blog_id, comments_reply_id, comments_content)
+        value (#{userId}, #{blogId}, #{replyId}, #{content})
+    </insert>
+
+    <delete id="deleteComment" parameterType="int">
+        delete from comments where comments_id = #{id}
+    </delete>
+    <delete id="deleteCommentByBlogId">
+        delete from comments where comment_blog_id = #{blogId}
+    </delete>
+
+</mapper>

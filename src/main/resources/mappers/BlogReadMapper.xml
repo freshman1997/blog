@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yuan.cn.blog.dao.BlogReadDao">
+    <sql id="Base_Column_List">
+        read_blog_id, read_number
+  </sql>
+    <insert id="addReadFirst" parameterType="int">
+        insert into blog_read(read_blog_id, read_number) values(#{blogId}, 1)
+    </insert>
+    <update id="updateReadNumber">
+        update blog_read set read_number = read_number + 1 where read_blog_id = #{blogId}
+    </update>
+    <select id="countReadNumberInBlog" resultType="java.lang.Integer">
+        select read_number from blog_read where read_blog_id = #{blogId}
+    </select>
+
+
+</mapper>
