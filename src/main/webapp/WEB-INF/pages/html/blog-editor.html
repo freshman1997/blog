@@ -8,12 +8,34 @@
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/common.css">
     <link rel="stylesheet" href="/static/css/blog-edit.css">
+    <link rel="stylesheet" href="/static/css/publish-loading.css">
     <script src="/static/js/jquery-3.4.1.min.js"></script>
     <script src="/static/js/editor/scripts/module.js"></script>
     <script src="/static/js/editor/scripts/uploader.js"></script>
     <script src="/static/js/editor/scripts/hotkeys.js"></script>
     <script src="/static/js/editor/scripts/simditor.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <style>
+        html, body{
+            height: 100%;
+        }
+        .modal-blog {
+            display: none;
+            visibility: hidden;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            outline: 0;
+            -webkit-overflow-scrolling: touch;
+            background-color: rgb(16, 154, 201);
+            filter: alpha(opacity=0);
+            background-color: rgba(0, 0, 0, 0);
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
 <div class="container" style="width: 100%; margin: 30px 0">
@@ -27,14 +49,14 @@
         <div style="width: 80%; margin: 0 auto">
             <form id="uploadForm">
                 <div class="form-group" style="display: flex; justify-content: flex-start;text-align: center">
-                    <input id="title" type="email" maxlength="20" name="title" style="width: 95%" class="form-control"
+                    <input id="title" type="email" maxlength="30" name="title" style="width: 95%" class="form-control"
                            placeholder="请输入文章标题">
-                    <span id="str-counter" style="border-radius: .1em; margin-top: 6px; margin-left: 10px">0/20</span>
+                    <span id="str-counter" style="border-radius: .1em; margin-top: 6px; margin-left: 10px">0/30</span>
                 </div>
                 <div class="form-group">
 
                     <p class="help-block">选择你的博客展示图片.</p>
-                    <input type="file" id="introducePhoto" name="introducePhoto">
+                    <input type="file" id="introducePhoto" accept=".png,.jpg,.jpeg" name="introducePhoto">
 
                 </div>
                 <div>
@@ -101,6 +123,12 @@
 
 </div>
 
+<div class="modal-blog">
+    <div class="loading">
+        <span></span>
+    </div>
+</div>
+
 <div id="back-option" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content" style="height: 150px">
@@ -118,6 +146,9 @@
             </div>
         </div>
     </div>
+</div>
+<div style="text-align: center;vertical-align:middle;margin: 0 auto 20px auto">
+    <span>Copyright © 2020-至今 Jack Yuan博客 保留所有权利.</span>
 </div>
 <script src="/static/js/blog-edit.js"></script>
 </body>

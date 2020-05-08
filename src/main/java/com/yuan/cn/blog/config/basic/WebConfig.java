@@ -100,7 +100,7 @@ public class WebConfig implements WebMvcConfigurer {
         resolver.setOrder(1);
         resolver.setName("/*");
         // 开发阶段设置不能缓存
-        resolver.setCacheable(true);
+        resolver.setCacheable(false);
         return resolver;
     }
 

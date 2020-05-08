@@ -11,9 +11,10 @@ function timestampToTime(timestamp) {
 }
 
 $('.row').each(function (i, v) {
+    var len = $(v).children('.item').length;
     $(v).children('.item').each(function (i1, v1) {
-        if (i1 === 0){
-            $(v1).before('<div style="width: 40px"></div>');
+        if (i1 === 0 || i1 === len){
+            $(v1).before('<div style="width: 20px"></div>');
             $(v1).after('<div style="width: 20px"></div>');
         }else
             $(v1).after('<div style="width: 20px"></div>');

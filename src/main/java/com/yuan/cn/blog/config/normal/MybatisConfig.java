@@ -31,6 +31,7 @@ public class MybatisConfig {
         dataSource.setUrl(PropertiesUtil.getProperty("db.url"));
         dataSource.setUsername(PropertiesUtil.getProperty("db.username"));
         dataSource.setPassword(PropertiesUtil.getProperty("db.password"));
+        dataSource.setValidationQuery("select 1");
 
         dataSource.setInitialSize(Integer.parseInt(PropertiesUtil.getProperty("db.initialSize")));
         dataSource.setMaxActive(Integer.parseInt(PropertiesUtil.getProperty("db.maxActive")));

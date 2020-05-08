@@ -66,11 +66,10 @@ $('#leave').click(function () {
 });
 
 $('#title').bind('input propertychange', function () {
-    $('#str-counter').text($('#title').val().length + '/20');
+    $('#str-counter').text($('#title').val().length + '/30');
 });
 
 var tagCategoryTagMap = new Map();
-var tagDataArray = [];
 var token = null;
 $(function () {
     //todo 从后台获取标签分类和对应的标签
@@ -208,6 +207,9 @@ $('#publish').click(function () {
         alert('请选择文章的标签');
         return;
     }
+    $('.modal-blog').css({'display':'block', 'visibility':'visible'});
+    $('.loading').css({'display':'block', 'visibility':'visible'});
+
     //todo 没有错误，发送ajax请求
     $.ajax({
         type: 'post',

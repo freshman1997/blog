@@ -1,5 +1,4 @@
 .navigation{
-    width: 101.5%;
     color: whitesmoke;
     padding: 30px;
     border-radius: 10px;
@@ -12,7 +11,7 @@
 
 .parent{
     height: 100%;
-    width: 101.5%;
+    /*width: 98%;*/
     margin-top: 20px;
     border-radius: 15px;
     display: table;
@@ -23,11 +22,10 @@
     padding-top: 15px;
 }
 .item{
-    width: 250px;
+    width: 20%;
     height: 250px;
     box-shadow:gray 0 0 10px;
     border-radius: 15px;
-    vertical-align: middle;
     text-align: center;
     display: table-cell;
     box-sizing: border-box;

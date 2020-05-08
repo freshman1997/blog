@@ -31,7 +31,9 @@
     <div id="preset" th:if="${#lists.size(details) == 0}" style="text-align:center;margin: 100px auto 0 auto;">
         <span>没有相关的结果</span>
     </div>
+
     <div class="parent">
+        <div style="height: 20px"></div>
         <div th:each="detail : ${details}">
             <div class="row">
                 <!--文章缩略-->
@@ -42,16 +44,15 @@
                     <div style="justify-content: space-between">
                         <span th:text="${#dates.format(d.createTime, 'MM月dd号 · yyyy年')}">8月23号 · 2019</span>
                         <h4><a class="b-title" th:href="'/blog/article/' + ${d.mask}" th:alt="${d.title}"
-                               th:title="${d.title}" th:text="${d.title}">Nginx 配置详解</a></h4>
+                               th:title="${d.title}" th:text="${d.title}"></a></h4>
                         <div style="display:inline-block;margin-bottom: 5px" th:each="tag : ${d.tags}">
-                            <span class="label label-success" th:text="${tag}">nginx</span>
+                            <span class="label label-success" th:text="${tag}"></span>
                         </div>
                     </div>
                 </div>
-                <div style="width: 45px"></div>
+                <!--                <div style="width: 38px"></div>-->
             </div>
             <div style="height: 20px"></div>
-
         </div>
     </div>
     <div class="loading">

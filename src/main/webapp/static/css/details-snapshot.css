@@ -1,8 +1,7 @@
 .parent-details{
-    width: 101.5%;
     box-shadow: gray 0 0 15px;
     border-radius: 15px;
-    padding: 20px;
+    padding: 20px 0 20px 15px;
 }
 .row{
     display: table-row;
@@ -14,6 +13,7 @@
     justify-content: flex-start;
     box-shadow: gray 0 0 10px;
     border-radius: 10px;
+    overflow: hidden;
 }
 
 .tag{

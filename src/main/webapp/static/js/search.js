@@ -7,7 +7,7 @@ function search(kw){
             $('.loading').css({'display': 'none', 'visibility': 'hidden'});
             if (ret.status === 0){
                 if (ret.data.length > 0) {
-                    var str = '';
+                    var str = '<div style="height: 20px"></div>';
                     for (var i = 0; i < ret.data.length; i++) {
                         str += '<div class="row">';
                         for (var j = 0; j < ret.data[i].length; j++) {
@@ -29,7 +29,6 @@ function search(kw){
                         }
                         str += '</div><div style="height: 20px"></div>';
                     }
-                    console.log(str);
                     $('#no-data').css({'display': 'none', 'visibility': 'hidden'});
                     var p = $('.parent');
                     p.html('');
